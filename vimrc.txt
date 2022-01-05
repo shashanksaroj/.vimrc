@@ -1,0 +1,94 @@
+syntax on
+set nu
+set clipboard=unnamedplus
+set mouse=a
+set tabstop=2
+set autoindent
+set shiftwidth=2
+set softtabstop=2
+set smarttab
+set expandtab
+set smartcase
+let g:auto_save = 1  " enable AutoSave on Vim startup
+
+let g:ale_fixers = {
+\   'javascript': ['prettier'],
+\   'css': ['prettier'],
+\}
+
+let g:ale_linters_explicit = 1
+set t_Co=256
+set background=dark
+colorscheme molokai
+map <C-i> gt
+
+nmap <silent> <C-e> <Plug>(ale_next_wrap)
+
+function! LinterStatus() abort
+    let l:counts = ale#statusline#Count(bufnr(''))    let l:all_errors = l:counts.error + l:counts.style_error
+    let l:all_non_errors = l:counts.total - l:all_errors    return l:counts.total == 0 ? 'OK' : printf(
+        \   '%d⨉ %d⚠ ',
+        \   all_non_errors,
+        \   all_errors
+        \)
+endfunction
+
+set statusline+=%=
+set statusline+=\ %{LinterStatus()}
+
+
+let g:ale_lint_on_enter = 0
+
+let g:ale_lint_on_save = 1
+
+let g:ale_sign_error = '●'
+let g:ale_sign_warning = '.'
+
+let g:airline_powerline_fonts=1
+
+let g:airline#extensions#tabline#enabled = 1
+
+set t_Co=256
+set background=dark 
+
+
+
+" Start NERDTree and leave the cursor in it.
+autocmd VimEnter * NERDTree 
+
+set nocompatible
+filetype off
+
+set rtp+=~/.vim/bundle/Vundle.vim
+call vundle#begin()
+Plugin 'VundleVim/Vundle.vim'
+
+Plugin 'preservim/nerdtree'
+
+Plugin 'vim-airline/vim-airline'
+Plugin 'vim-airline/vim-airline-themes'
+Plugin 'dense-analysis/ale'
+Plugin 'tribela/vim-transparent'
+
+Plugin '907th/vim-auto-save' 
+
+
+
+" Add plugins here
+
+
+call vundle#end()
+filetype plugin indent on
+
+  
+    set autowrite
+
+
+
+      
+    nnoremap <C-c> :!g++ -std=c++11 % -Wall -g -o %.out && ./%.out<CR>
+     autocmd filetype c nnoremap <C-c> :w <bar> !gcc -std=c99 -lm % -o %:p:h/%:t:r.out && ./%:r.out<CR> 
+  autocmd filetype java nnoremap <C-c> :w <bar> !javac % && java -enableassertions %:r <CR>
+    autocmd filetype python nnoremap <C-c> :w <bar> !python % <CR> 
+    autocmd filetype perl nnoremap <C-c> :w <bar> !perl % <CR> 
+    autocmd filetype go nnoremap <C-c> :w <bar> !go build % && ./%:p <CR> 
